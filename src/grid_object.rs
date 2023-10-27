@@ -1,3 +1,11 @@
+use rand::Rng;
+
+macro_rules! rand_range {
+    ($a:expr, $b:expr) => {
+        rand::thread_rng().gen_range($a..$b)
+    };
+}
+
 pub struct GridObject {
     grid: Vec<bool>,
     lenght: usize,
@@ -17,7 +25,15 @@ impl GridObject {
         self.grid = vec![value; self.height * self.lenght];
     }
 
-    pub fn output(&self) {
+    pub fn randomize(&mut self){
+        for y in 0..self.height{
+            for x in 0..self.lenght{
+                Self::set_cell(self, rand_range!(0,2) == 1, x, y);
+            }
+        }
+    }
+
+    pub fn _output(&self) {
         for y in 0..self.height {
             for x in 0..self.lenght {
                 print!("{}", self.grid[x + self.lenght * y] as u8);
@@ -29,9 +45,10 @@ impl GridObject {
     pub fn apply_rules(&mut self) {
         for y in 0..self.height {
             for x in 0..self.lenght {
+                let new_value = Self::rule_set(self, x, y);
                 Self::set_cell(
                     self,
-                    Self::rule_set(self.grid[x + self.lenght * y], x, y),
+                    new_value,
                     x,
                     y,
                 )
@@ -39,22 +56,52 @@ impl GridObject {
         }
     }
 
-    fn rule_set(value: bool, x: usize, y: usize) -> bool {
-        if (x % 2 == 0) && (y % 3 == 0) {
-            return !value;
+    fn rule_set(&mut self,x: usize, y: usize) -> bool {
+        let orig_value:bool = self.grid[x + self.lenght * y];
+        let mut surounding_values:Vec<bool> = Vec::new(); 
+        
+        for y_off in -1..1{
+            for x_off in -1..1{
+                surounding_values.push(Self::_get_cell(&self, (x as i32 + x_off).max(0) as usize, (y as i32 + y_off).max(0) as usize))
+            }
         }
-        return false;
+
+        let mut living_counter = 0;
+
+        for state in surounding_values{
+            if state{
+                living_counter += 1;
+            }
+        }
+
+        if living_counter > 2 && living_counter < 8{
+            return true;
+        }else{
+            return false;
+        }
+
+    }
+
+    pub fn get_lenght(&self)->usize{
+        return self.lenght;
+    }
+    
+    pub fn get_height(&self)->usize{
+        return self.height;
     }
 
     pub fn set_cell(&mut self, value: bool, x: usize, y: usize) {
         self.grid[x + self.lenght * y] = value;
     }
 
-    pub fn get_cell(&self, x: usize, y: usize) -> bool {
+    pub fn _get_cell(&self, x: usize, y: usize) -> bool {
+        if x > self.lenght || y > self.height{
+            return false;
+        }
         return self.grid[x + self.lenght * y];
     }
 
-    pub fn flip_cell(&mut self, x: usize, y: usize) {
-        Self::set_cell(self, !Self::get_cell(self, x, y), x, y);
+    pub fn _flip_cell(&mut self, x: usize, y: usize) {
+        Self::set_cell(self, !Self::_get_cell(self, x, y), x, y);
     }
 }
