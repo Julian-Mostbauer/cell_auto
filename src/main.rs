@@ -13,7 +13,7 @@ const _BLACK: u32 = 0x000000;
 const _WHITE: u32 = 0xffffff;
 const _YELLOW: u32 = 0xffff00;
 fn main() {
-    let fps: f64 = 600.0;
+    let fps: f64 = 60.0;
 
     let mut grid1: GridObject = GridObject::new(100, 100);
     grid1.randomize();
