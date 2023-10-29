@@ -5,8 +5,8 @@ use grid_object::GridObject;
 use minifb::{Key, Window, WindowOptions};
 
 /* GLOBAL CONSTANTS---------------------------------------------------------------------------------------------------- */
-const WINDOW_WIDTH: usize = 640;
-const WINDOW_HEIGHT: usize = 640;
+const WINDOW_WIDTH: usize = 900;
+const WINDOW_HEIGHT: usize = 900;
 const _RED: u32 = 0xff0000;
 const _GREEN: u32 = 0x00ff00;
 const _BLUE: u32 = 0x0000ff;
@@ -14,10 +14,10 @@ const _BLACK: u32 = 0x000000;
 const _WHITE: u32 = 0xffffff;
 const _YELLOW: u32 = 0xffff00;
 fn main() {
-    let fps: f64 = 60.0;
+    let fps: f64 = 600.0;
 
-    let mut grid1: GridObject = GridObject::new(100, 100);
-    grid1.uniform_to_value(false);
+    let mut grid1: GridObject = GridObject::new(450, 450);
+    grid1.randomize();
     
     let mut buffer: Vec<u32> = vec![0; WINDOW_WIDTH * WINDOW_HEIGHT];
 
@@ -46,7 +46,15 @@ fn main() {
 fn handle_input(window: &mut Window, grid:&mut GridObject,loop_counter: u32) {
     if window.is_key_down(Key::R){
         grid.randomize();
-        println!("Pressed")
+        println!("randomized")
+    }
+    if window.is_key_down(Key::T){
+        grid.uniform_to_value(true);
+        println!("set all to true")
+    }
+    if window.is_key_down(Key::F){
+        grid.uniform_to_value(false);
+        println!("set all to false")
     }
 }
 

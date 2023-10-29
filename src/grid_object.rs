@@ -60,8 +60,13 @@ impl GridObject {
         let orig_value:bool = self.grid[x + self.lenght * y];
         let mut surounding_values:Vec<bool> = Vec::new(); 
         
-        for y_off in -1..1{
-            for x_off in -1..1{
+        if x > 10 && y > 10{
+            
+        }
+
+        
+        for y_off in -1..=1{
+            for x_off in -1..=1{
                 surounding_values.push(Self::_get_cell(&self, (x as i32 + x_off).max(0) as usize, (y as i32 + y_off).max(0) as usize))
             }
         }
@@ -74,7 +79,7 @@ impl GridObject {
             }
         }
 
-        if living_counter > 2 && living_counter < 8{
+        if living_counter < 2 || living_counter > 4{
             return true;
         }else{
             return false;
@@ -95,7 +100,7 @@ impl GridObject {
     }
 
     pub fn _get_cell(&self, x: usize, y: usize) -> bool {
-        if x > self.lenght || y > self.height{
+        if x > self.lenght-1 || y > self.height-1{
             return false;
         }
         return self.grid[x + self.lenght * y];
