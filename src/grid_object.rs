@@ -21,16 +21,18 @@ impl GridObject {
         }
     }
 
-    pub fn uniform_to_value(&mut self, value: bool) {
+    pub fn uniform_to_value(&mut self, value: bool) -> &mut Self {
         self.grid = vec![value; self.height * self.lenght];
+        self
     }
 
-    pub fn randomize(&mut self) {
+    pub fn randomize(&mut self) -> &mut Self {
         for y in 0..self.height {
             for x in 0..self.lenght {
                 Self::set_cell(self, rand_range!(0, 2) == 1, x, y);
             }
         }
+        self
     }
 
     pub fn _output(&self) {
@@ -46,7 +48,7 @@ impl GridObject {
         for y in 0..self.height {
             for x in 0..self.lenght {
                 let new_value = Self::rule_set(self, x, y);
-                Self::set_cell(self, new_value, x, y)
+                Self::set_cell(self, new_value, x, y);
             }
         }
     }
@@ -84,8 +86,9 @@ impl GridObject {
         self.height
     }
 
-    pub fn set_cell(&mut self, value: bool, x: usize, y: usize) {
+    pub fn set_cell(&mut self, value: bool, x: usize, y: usize) -> &mut Self {
         self.grid[x + self.lenght * y] = value;
+        self
     }
 
     pub fn _get_cell(&self, x: usize, y: usize) -> bool {
@@ -95,7 +98,8 @@ impl GridObject {
         self.grid[x + self.lenght * y]
     }
 
-    pub fn _flip_cell(&mut self, x: usize, y: usize) {
+    pub fn _flip_cell(&mut self, x: usize, y: usize) -> &mut Self {
         Self::set_cell(self, !Self::_get_cell(self, x, y), x, y);
+        self
     }
 }
