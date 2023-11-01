@@ -75,7 +75,7 @@ impl GridObject {
             }
         }
 
-        !(5..=7).contains(&living_counter)
+        !(2..=5).contains(&living_counter)
     }
 
     pub fn get_lenght(&self) -> usize {
